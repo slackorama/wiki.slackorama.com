@@ -1,0 +1,11 @@
+== Version Arithmetic ==
+
+To get something greater than a certain version:
+
+    echo 1.2.3 | \
+       awk -F'.' '{ ver=1000000*$1 + 1000*$2 + $3; if (ver > 1002001) print $_
+       }'
+
+From [http://stackoverflow.com/questions/470232/bash-script-get-sublist-of-file StackOverflow]        
+
+

@@ -1,0 +1,33 @@
+== Find Class ==
+
+Want to find which jar a java class is coming from? Then do this:
+
+   Class clazz = Class.forName("com.sleepycat.je.DatabaseException");
+   java.security.ProtectionDomain dom = clazz.getProtectionDomain();
+   java.security.CodeSource cs = dom.getCodeSource();
+   java.net.URL url = cs.getLocation();
+   out.println(url.toString());
+
+== Extract a File from a Jar ==
+
+    private File getFile( String resourceName )
+    {
+      ClassLoader cloader = Thread.currentThread().getContextClassLoader();
+      URL resource = cloader.getResource( resourceName );
+      if ( resource == null )
+      {
+          throw new IllegalArgumentException( "Could not get resource: " +
+            resourceName );
+      }
+      return new File( resource.getPath() );
+    }
+
+
+== Load a property file ==
+
+Assuming your property file is named foo and is in the same directory as your
+class file.
+
+     java.io.InputStream in = this.getClass().getResourceAsStream("foo.properties");
+     java.util.Properties res = new Properties();
+     res.load(in);

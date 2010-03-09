@@ -1,0 +1,141 @@
+== Start up in terminal (without window) ==
+    emacs -nw
+
+== Start up without loading anything ==
+
+    emacs -q -no-site-file
+
+== Byte compile a file from command line ==
+
+   emacs --batch --eval '(byte-compile-file "somefile.el")'
+    
+== Define and use an abbreviation ==
+# Type an abbreviated word (e.g. li)
+# Type <code>C-x a i g</code>.  This runs <code>inverse-add-global-abbrev</code> function.
+# Define the abbreviation by entering text (e.g. Little Lamb)  
+# Turn on the abbreviation minor mode via <code>M-x abbrev-mode</code>
+
+== Clear a rectangle of text ==
+# Move point to just before a spot, and set the mark by typing <code>C-space</code>.
+# Move to a spot below it.
+# Type <code>C-x r c</code> to clear the rectangle you just defined.
+
+== Search and replace text with a new line ==
+# Type <code>M-%</code>
+# Enter search text, hit enter
+# Enter replace text and type <code>C-q C-j</code>, hit enter
+# Voila!
+
+== Open a file readonly ==
+<code>C-x C-r</code> is the command <code>find-file-read-only</code>.
+
+== Find a library ==
+
+<code>M-x locate-library</code> is your friend when you need to verify where a
+library is getting loaded from.
+
+==  Shell Commands ==
+=== Run a command and put output in current buffer ===
+
+<code>C-u M-! *command*</code>
+
+For example:
+
+    C-u M-! ls -l
+
+== Customize the color of things ==
+
+    ;; set up some custom colors that look ok on a black background
+    (custom-set-faces
+     '(font-lock-comment-face
+       ((t (:foreground "light blue"   :background "black"))) 'now)
+     '(font-lock-keyword-face
+       ((t (:foreground "purple"       :background "black"))) 'now)
+     '(font-lock-string-face
+       ((t (:foreground "yellow"       :background "black"))) 'now)
+     '(font-lock-builtin-face
+       ((t (:foreground "dark magenta" :background "black"))) 'now)
+     '(font-lock-function-name-face
+       ((t (:foreground "red"          :background "black"))) 'now)
+     )
+
+== See info about font at point  ==
+
+; <code>C-x =</code>: runs the command what-cursor-position. With a prefix, show details about that character in <code>*Help*</code> buffer.  See also describe-char.
+
+
+
+
+     
+
+== Specify start up parameters on one line ==
+
+    # -*- shell-script -*-
+
+== Create a shell buffer ==
+
+    (let ((buffer (get-buffer-create "some-shell"))) (shell buffer))
+
+
+== Fun With Auto Insert ==
+
+   (setq auto-insert-alist
+     '(
+       (("\\.el\\'" . "Emacs Lisp header")
+        "Short description: " ";;; "
+        (file-name-nondirectory
+         (buffer-file-name))
+        " --- " str "\n\n"  _
+        "\n\n(provide "
+        (file-name-sans-extension
+         (file-name-nondirectory
+          (buffer-file-name)))
+        ")\n;;; "
+        (file-name-nondirectory
+         (buffer-file-name))
+        " ends here\n")
+       (("\\.js\\'" . "JavaScript header")
+        nil "\/\/ " (file-name-nondirectory (buffer-file-name))
+        "\n\n" _ "\n\n\/\/ "
+        (file-name-nondirectory
+         (buffer-file-name))
+        " ends here\n")
+       ((sh-mode . "shell mode") "Short Description: " "#!\/bin\/sh\n# "
+                 (file-name-nondirectory (buffer-file-name))
+                 " -- " str "\n#\n" _ "\n\n# "
+                 (file-name-nondirectory (buffer-file-name))
+                 " ends here")))
+
+
+== Eshell ==
+
+Redirecting to buffers
+
+To overwrite buffer "foo":
+
+    ls > #<buffer foo>
+
+To append to buffer "foo":
+
+    ls >> #<buffer foo>
+
+To insert at point in buffer "foo":
+
+    ls >>> #<buffer foo>
+
+== Search and replace for backslash ==
+
+    (replace-regexp-in-string "/" (regexp-quote "\\") str)
+
+== jabber.el ==
+
+To set your status message:
+
+    (jabber-send-presence "" "emacs FTW!" 10)  ;;; online
+
+    
+
+== See also ==
+
+# [[Linux#toc15|Tips for installing info files]] 
+# [[Slime|Tips for using slime]]

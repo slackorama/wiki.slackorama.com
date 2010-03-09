@@ -1,0 +1,152 @@
+== Subversion book online ==
+
+[http://svnbook.red-bean.com/nightly/en/index.html Link]
+
+== Ignoring unversioned items ==
+
+[http://svnbook.red-bean.com/nightly/en/svn.advanced.props.special.ignore.html Source]
+
+When found on a versioned directory, the ##svn:ignore## property is expected to contain a list of newline-delimited file patterns which Subversion should use to determine ignorable objects in that same directory.
+
+    svn propedit svn:ignore
+ 
+== Create branch from working copy ==
+
+    svn copy . url://server/repos/project/tags/tagname -m "Create tagname"
+ 
+== Update working copy to a different URL ==
+
+    svn switch --relocate file:///tmp/repos file:///tmp/newlocation .
+ 
+== Retrieving a deleted copy ==
+
+Follow these steps if you need to retrieve the file again:
+
+    svn log --verbose | grep -i myfile -A5 -B5
+
+This will give you just enough info to figure out in which revision the file was deleted.
+
+After that you can bring it back from the dead:
+
+    svn copy --revision 28 http://svnpath/trunk/myfile ./myfile
+ 
+== Undoing a commit ==
+
+    $ svn merge -c -303 web.xml
+
+or
+
+    $svn merge -r 303:302 web.xml
+    U web.xml
+    $ svn status
+    M web.xml
+    $ svn diff
+    # verify that the change is removed
+    $ svn commit -m "Undoing change committed in r303."
+    Sending web.xml
+    Transmitting file data .
+    Committed revision 350.
+
+[http://noehr.org/2007/12/undo_commit_in_subversion_svn_1.html Source]
+
+ 
+== How can I do an in-place 'import' ==
+(i.e. add a tree to Subversion such that the original data becomes a working copy directly)?
+
+[http://subversion.tigris.org/faq.html#in-place-import Use the FAQs Luke]
+
+== Helpful commands ==
+
+=== svn export ===
+
+export: Create an unversioned copy of a tree.
+
+ 
+=== svn resolved ===
+
+resolved: Remove 'conflicted' state on working copy files or directories.
+
+usage: resolved PATH...
+
+ 
+=== Make multiple directories at a time ===
+
+    svn mkdir /path/to/repos/myfiles/{trunk,tags,branches}
+ 
+=== Setting Properties Automatically ===
+ 
+Edit ##$HOME/.subversion/config##
+
+    ### Set enable-auto-props to 'yes' to enable automatic properties
+    ### for 'svn add' and 'svn import', it defaults to 'no'.
+    ### Automatic properties are defined in the section 'auto-props'.
+    enable-auto-props = yes
+    
+    ### Section for configuring automatic properties.
+    ### The format of the entries is:
+    ### file-name-pattern = propname=value;propname[=value...]
+    ### The file-name-pattern can contain wildcards (such as '*' and
+    ### '?'). All entries which match will be applied to the file.
+    ### Note that auto-props functionality must be enabled, which
+    ### is typically done by setting the 'enable-auto-props' option.
+    auto-props
+    
+    *.php = svn:eol-style=native;svn:keywords=Author Date Id Revision
+    *.txt = svn:eol-style=native;svn:keywords=Author Date Id Revision
+    *.css = svn:eol-style=native
+    *.js = svn:eol-style=native
+    *.sample = svn:eol-style=native
+    *.html = svn:eol-style=native
+    *.htm = svn:eol-style=native
+    *.htaccess = svn:eol-style=native
+    *.png = svn:mime-type=image/png
+    *.jpg = svn:mime-type=image/jpeg
+    *.gif = svn:mime-type=image/gif
+
+Via find
+
+    find . -name \*.txt -exec svn propset svn:eol-style native {} \;
+    
+    find . -name \*.txt -exec svn propset svn:keywords 'Id' {} \;
+ 
+== Getting Changes For Last 7 Days ==
+
+    svn log -v -r HEAD:{`date +%Y-%m-%d -d'7 days ago'`}
+
+== Rolling back changes ==
+
+How to undo, rollback, revert, etc. a change:
+
+    svn merge -r rev:rev-1 path
+
+For example:    
+
+    $ svn merge -r 303:302 http://svn.example.com/repos/calc/trunk
+    U  integer.c
+    
+    $ svn status
+    M  integer.c
+    
+    $ svn diff
+    …
+    # verify that the change is removed
+    …
+    
+    $ svn commit -m "Undoing change committed in r303."
+    Sending        integer.c
+    Transmitting file data .
+    Committed revision 350.
+
+From
+[http://svnbook.red-bean.com/en/1.1/ch04s04.html#svn-ch-4-sect-4.2|Subversion
+book]
+
+== Patching a file ==
+
+Create a patch file
+
+    svn diff > patchfile
+
+Apply the patch file
+
+    patch -p0 -i patchfile

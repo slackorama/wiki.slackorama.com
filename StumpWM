@@ -1,0 +1,6 @@
+== Get a window's class and title ==
+
+
+Run the StumpWM command:
+
+       info "%c %t"

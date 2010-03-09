@@ -1,0 +1,38 @@
+== MPC commands ==
+
+    mpc                         Displays status
+    mpc add <filename>          Add a song to the current playlist
+    mpc del <playlist #>        Remove a song from the current playlist
+    mpc play <number>           Start playing at <number> (default: 1)
+    mpc next                    Play the next song in the current playlist
+    mpc prev                    Play the previous song in the current playlist
+    mpc pause                   Pauses the currently playing song
+    mpc stop                    Stop the currently playing playlists
+    mpc seek <0-100>            Seeks to the position specified in percent
+    mpc clear                   Clear the current playlist
+    mpc shuffle                 Shuffle the current playlist
+    mpc move <from> <to>        Move song in playlist
+    mpc playlist                Print the current playlist
+    mpc listall [<song>]        List all songs in the music dir
+    mpc ls [<dir>]              List the contents of <dir>
+    mpc lsplaylists             Lists currently available playlists
+    mpc load <file>             Load <file> as a playlist
+    mpc save <file>             Saves a playlist as <file>
+    mpc rm <file>               Removes a playlist
+    mpc volume [+-]<num>        Sets volume to <num> or adjusts by [+-]<num>
+    mpc repeat <on|off>         Toggle repeat mode, or specify state
+    mpc random <on|off>         Toggle random mode, or specify state
+    mpc search <type> <queries> Search for a song
+    mpc crossfade [sec]         Set and display crossfade settings
+    mpc update                  Scans music directory for updates
+    mpc version                 Reports version of MPD
+
+== Tips ==
+
+  *  Make sure that the user defined error_file is in `.mpd.conf`
+  *  Make sure that the MPD_PORT is available
+
+== Helpful Links ==
+
+; Install: [http://ubuntuforums.org/showthread.php?t=5194  Directions] are
+  helpful but some of the links are busted.

@@ -1,0 +1,99 @@
+== How to install/uninstall .deb files ==
+
+=== To install .deb file ===
+
+    sudo dpkg -i package_file.deb
+
+=== To uninstall .deb file ===
+
+    sudo dpkg -r package_name
+    
+== How to convert .rpm files to .deb files ==
+
+    sudo alien package_file.rpm
+
+== List the partition tables ==
+
+Simply run this command:
+
+    sudo fdisk -l
+
+This will show you a list of the partition tables.
+
+== Display available memory ==
+
+Run this command from a terminal window.
+
+    cat /proc/meminfo
+
+or
+
+    free -m
+or
+
+
+    free -mt
+
+== Look up a word ==
+
+Replace 'word' with the word you would like defined
+
+    curl dict://dict.org/d:word
+
+
+== User Management ==
+
+=== Create a new user ===
+
+
+    adduser --shell /bin/bash --home /home/foobar --system foobar
+
+=== Add new user to primary group ===
+
+
+    useradd -g slackers slack
+
+
+=== Add existing user to existing group ===
+**VERY IMPORTANT** to use the ##-a## switch to add the user to the group(s).
+
+    usermod -a -G farters slack
+
+=== Change Existing user to primary group ===
+
+    usermod -g fathers slack
+
+== Mounting a USB stick ==
+
+# Check for it first (example assumes /dev/sdba1): ##sfdisk -l##
+# create a dir for you: ##mkdir /media/usbstick##
+# mount it: ##mount /dev/sdb1 /media/usbstick -oo uid=`whoami`##
+
+== Setting up dual monitors ==
+
+To have laptop monitor to the right of the lcd
+
+    % xrandr --output LVDS --auto --right-of VGA
+
+== Installing Info Files ==
+
+Personal info files are kept in ~/.emacs.d/info
+
+   % gzip emacs-w3m.info > emacs-w3m.info.gz
+   % cp emacs-w3m.info.gz $HOME/.emacs.d/info/
+   % ginstall-info --info-dir=$HOME/.emacs.d/info --info-file=emacs-w3.info.gz
+
+== Getting a list of fonts ==
+
+Use fc-list.
+
+    $ fc-list                # list all the fonts
+    $ fc-list :spacing=mono  # this will list just mono-spaced fonts
+   
+
+== See also ==
+# [http://ubuntuguide.org/wiki/Dapper Unofficial Ubuntu 6.06 Start Guide]
+# [[Unix]]
+
+
+

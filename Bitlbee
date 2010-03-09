@@ -1,0 +1,17 @@
+== What I did to configure it ==
+
+    # edit libyahoo2.c touse pager_port 80
+    # edit aim.h to use PORT 80
+    
+    > ./configure --prefix=~/bin/bitlbee
+    > make
+    > make install-etc install
+    > gcc bitlbeed.c bitlbeed
+    # edit ~/bin/bitlbee/etc/bitlbee/motd.txt
+    # edit ~/bin/bitlbee/etc/bitlbee/bitlbee.conf
+    > bitlbeed -p6669 -n1 ~/bin/bitlbee/sbin/bitlbee
+
+
+== See Also ==
+
+[[Pidgin]]    

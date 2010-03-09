@@ -1,0 +1,15 @@
+== Associative Arrays ==
+
+Initializing
+
+    $prices = array( 'Tires'=>100, 
+    'Oil'=>10, 'Spark Plugs'=>4 );
+
+Accessing
+
+    echo $prices[ 'Tires' ]
+
+Looping
+
+    foreach ($prices as $key => $value)
+      echo $key.'=>'.$value.'<br />';

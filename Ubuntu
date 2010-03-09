@@ -1,0 +1,56 @@
+== How to upgrade to next version ==
+
+[http://ubuntu-tutorials.com/2007/01/05/steps-to-upgrading-your-ubuntu-machine-ubuntu-6061-610/|From Ubuntu Tutorial]
+
+== How to tell what version you are running ==
+
+         cat /etc/issue
+
+or
+
+         lsb_release -a
+
+== Post upgrade things to do ===
+    
+     sudo apt-get autoremove
+
+==  Apache2 Info ==
+
+=== cgi-bin  ===
+By default cgi-bin is located in ##/usr/lib/cgi-bin##
+
+=== apache2.conf ===
+
+Located at ##/etc/apache2/apache2.conf##
+
+Also pay attention to files in ##/etc/apache2/sites-available##
+
+== Information about install package ==
+
+This command will list all the files 'owned' by the given package..
+
+    dpkg -L packagename
+
+== See which package provided a file  ==
+
+Using the ##-S## option with ##dpkg## directly is a really simple way to find out what package provided the file or executable you’re looking for.
+
+    cedwards@monkey:~$ dpkg -S $(which host)
+    bind9-host: /usr/bin/host
+
+== Restoring installed packages ==
+
+On the original system:
+
+   dpkg --get-selections > ~/installed_packages
+
+Then, on the new system:
+
+   dpkg --set-selections < ~/installed_packages
+   apt-get -u dselect-upgrade
+    
+
+
+
+
+

@@ -1,0 +1,190 @@
+== Color Output ==
+
+Colors are turned off by default.  To enable them,
+
+     git config --global color.diff auto
+     git config --global color.status auto
+     git config --global color.branch auto
+
+== To revert all local changes
+
+If you want to revert changes made to your working copy, do this:
+
+     git checkout .
+
+If you want to revert changes made to the index (i.e., that you have added), do this:
+
+      git reset
+
+If you want to revert a change that you have committed, do this:
+
+       git revert ...
+
+== Differences between two dates ==
+
+Use `git whatchanged`
+
+     git whatchanged --since="1 day ago"
+
+
+== List changes that will be pulled ==
+
+    git log HEAD..branch
+
+== Basic workflow to push to remote ==
+
+On remote machine (foo.com):
+
+    mkdir some/proj.git
+    cd some/proj.git
+    git --bare init
+
+Then on local machine:
+
+    git remote add dh ssh://your_un@foo.com/~/some/proj.git
+    git push --tags dh master  # this will push tags and refspecs
+
+
+== Find which remote repos are configured ==
+
+    $ git remote -v
+
+or    
+
+    git config --get-regexp '^remote'
+
+and then:
+
+    % git remote show <REMOTE_NAME>
+
+
+    
+== Show files changed for specific commit ==
+
+    git show --stat <rev>
+
+`--stat` is the important one here    
+
+== Dealing with submodules ==
+
+After cloning a repo, run this to get the submodules:
+
+    > git submodule init
+    > git submodule update
+
+[http://woss.name/2008/04/09/using-git-submodules-to-track-vendorrails/ Article].
+
+
+== Dealing with patches ==
+
+First clone the repo and check out the branch
+
+
+     > git clone git://github.com/slackorama/dojo-yql
+     > cd dojo-yql
+     > git checkout -b some_fix
+
+Then, make your fixes, commit them but *don't* merge to the master branch.
+Now create your patch:
+
+     > git format-patch master --stdout > some_fix.patch
+
+Now you have a patch, send it to the maintainer. Now the maintainer will look
+at the changes in the patch.
+
+     > git apply --stat some_fix.patch
+
+This command doesn't apply the patch, it only shows the stats about what it'll
+do.  After looking at them, you can test them out with:
+
+     > git apply --check some_fix.patch
+
+If there are no errors, then apply the patch.  By using `git am`, you will
+give sign off to the patch.
+
+    > git am --signoff < some_fix.patch
+
+And that's it.  Patches were applied and master branch has been updated.
+
+You can also combine git format-patch and git am commands to select commits
+from one branch and apply them to the current one.
+
+    > git format-patch -k --stdout R1..R2 | git am -3 -k
+
+
+== Prune deleted remote-tracking branches from "git branch -r" listing ==
+
+    git remote prune <remote>
+
+
+== Rebasing commits ==
+
+This is handy to combine commits on the local repo before pushing
+upstream...to clean up the commit history and whatnot.  You run an
+'interactive rebase.'
+
+    git rebase -i origin/master
+
+Then you can just pick the first one and squash the other commits.
+
+Or you can do this....for projects that got rebased upstream...ugh.
+
+   (master) > git pull origin master # or git fetch
+   (master) > git checkout shared
+   (shared) > git rebase master
+   # resolve any conflicts in files e.g. foobar.txt
+   (shared) > git add foobar.txt
+   (shared) > git rebase --continue (or git rebase --abort)
+
+== Fetch to see what changed ==
+
+First:
+
+    git fetch origin master
+
+Then:
+
+    git log origin/master ^master
+
+
+== Delete tracking branches that have been deleted on remote ==
+
+     git remote prune origin
+
+== How to change git remote HEAD to point to something besides 'MASTER' ==
+
+You really can't.  But here's a fix:
+
+    git branch -m master development
+    git branch -m published master
+    git push origin master
+
+....well you can but you can't do a 'git clone REPO'.  You need to do this:
+
+    git clone -n /some/repo.git
+    git pull origin some_other_branch
+
+
+See
+[http://stackoverflow.com/questions/1485578/how-do-i-change-a-git-remote-head-to-point-to-something-besides-master Stackoverflow] for more info and [http://groups.google.com/group/github/browse_thread/thread/eb3046a7b4c8bec7/b64ee724a0db5471 Github google group]
+
+== Undoing a rebase ==
+
+The easiest way would be to find the head commit of the branch as it was immediately before the rebase started in the reflog...
+
+    git reflog
+
+and to reset the current branch to it (with the usual caveats about being absolutely sure before reseting with the --hard option).
+
+    # Suppose the old commit was HEAD@{5} in the ref log
+    git reset --hard HEAD@{5}
+
+You can check the history of the candidate old head by just doing a <tt>git log HEAD@{5}</tt>.
+
+See [http://stackoverflow.com/questions/134882/undoing-a-git-rebase Stackoverflow] yet again.
+
+== Links ==
+
+
+*  [http://cheat.errtheblog.com/s/git/ Git cheatsheet]
+*  [http://gitready.com Gitready]

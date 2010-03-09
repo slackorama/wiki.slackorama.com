@@ -1,0 +1,47 @@
+=== Copy and Paste Fun ===
+(Assumes that ##C-z## is your control chord)
+
+    C-z [ Start Move (move with keys)
+    
+    [SPACE] begin select (move with keys)
+    [SPACE] end select
+
+Now you can:
+
+    C-z > puts it in bufferfile (/tmp/screen-exchange)
+    C-z ] pastes it in
+
+To suck up into hold spaces what's in bufferfile:
+
+    C-z <
+
+== Use a different bufferfile ==
+
+Change the filename used for reading and writing with the paste buffer. The
+default is <tt>/tmp/screen-exchange</tt>.
+
+        C-z: bufferfile /etc/passwd
+        C-z < C-z ]
+        C-z : bufferfile
+
+Sucks up /etc/passwd into buffer space.
+
+== Remove bufferfile ==
+
+Unlink the screen-exchange file
+
+       C-z =
+
+
+== Helpful Tips ==
+
+* Set up a bookmark in web browser to easily access screen-exchange file
+* Set up emacs bookmark to easily access screen-exchange file
+
+== See Also ==
+
+* [http://web.mit.edu/gnu/doc/html/screen_11.html MIT page about screen]
+* [[Unix#toc42|Unix Screen Page]]
+
+
+

@@ -1,0 +1,24 @@
+== Starting it up ==
+
+   mysql --user=username --password=booar
+   mysql> use name_of_db;
+
+
+== Show all the tables   ==
+
+    show tables;
+
+Or to only show certain tables:
+
+    show tables like 'FOO%';
+
+== Sample Create statement ==
+
+     create table foobar (
+           id int not null auto_increment primary key,
+           bar_id int not null,
+           name varchar(100),
+           FOREIGN KEY (bar_id) REFERENCES bar(id)
+     );
+
+

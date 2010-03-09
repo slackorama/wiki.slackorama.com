@@ -1,0 +1,8 @@
+== Mounting as mass storage device ==
+
+This worked on my work computer:
+
+   mkdir /media/usbstick
+   mount /dev/sdb /media/usbstick
+
+   

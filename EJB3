@@ -1,0 +1,35 @@
+== Entity Relationships ==
+
+=== @OneToMany ===
+In regards to one-to-many unidirectional, the relationships aren't inserted at the same time so your foreign key must not be "NOT NULL" in order for the following to work (at least on [Oracle]):
+
+    SQL 
+    ===================================
+    create table PORTAL (
+          id not null primary key,
+          name varchar2(50)
+    );
+    
+    create table PORTAL_AREA (
+         id not null primary key,
+         portal_id number -- should not be 'non null'
+    );
+    
+    JAVA
+    ============================
+    @Entity
+    public class Portal {
+         ...
+        @OneToMany
+        @JoinColumn( name = "PORTAL_ID" )
+        public Collection<PortalArea> getPortalAreas() {
+          ...
+        }
+    }
+    
+    @Entity
+    public class PortalArea (
+        // no ref to portal here
+    )
+
+

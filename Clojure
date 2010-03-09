@@ -1,0 +1,60 @@
+== classpath for emacs and slime ==
+
+    (setq swank-clojure-extra-classpaths
+       (list "/class/path/1" "/class/path/2" "/class/path/3" "etc"))
+
+== find all files that match a pattern ==
+
+    (filter #(re-find #"\.clj$" (str %)) (file-seq(java.io.File. ".")))
+
+== Find functions that match a pattern ==
+
+    (find-doc #"\?$")   ;; find all fn that end with "?"    
+
+== Seeing the source of clojure functions ==
+
+Use Chris Housers <code>repl-utils</code> library.  
+
+    myapp> (use 'clojure.contrib.repl-utils)
+    nil
+    myapp> (source resolve)
+    (defn resolve
+      "same as (ns-resolve *ns* symbol)"
+      [sym] (ns-resolve *ns* sym))
+    nil
+
+== Reload library code ==
+
+Use <code>:reload</code>
+
+    user> (use :reload '[clojure.contrib.math :only (round)])
+
+== Tab completion at the repl ==
+
+Use <code>rlwrap</code>
+
+[http://en.wikibooks.org/wiki/Clojure_Programming/Getting_Started#Enhancing_Clojure_REPL_with_rlwrap
+Info about this is on wikibooks] 
+
+== Testing clojure objects ==
+
+Metadata with test seems promising.  To wit,
+
+    user> (def stu {:name "Stu" :email "stu@foobar.com"})
+    #'user/stu
+    user> (def test-stu (with-meta stu {:test fake-test}))
+    #'user/test-stu
+    user> (test test-stu)
+    :ok
+
+== Regex ==
+
+A simple example:
+
+    user> (re-seq #"\w+" "the quick brown fox")
+    ("the" "quick" "brown" "fox")
+    
+== See Also ==
+
+* [[Emacs]]
+* [[Slime]]

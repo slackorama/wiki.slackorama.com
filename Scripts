@@ -1,0 +1,49 @@
+Tips and tricks for scripting in unix.
+
+== Test if file name matches ==
+
+  # assume $x holds filename like './foobar/foo/sedscr"
+  if echo "$x" | grep -q "sedscr"; then
+      echo "Contains the text sedscr in name";
+  else
+      echo "Doesn't contain sedscr in name";
+  fi
+
+== Echo to stderr ==
+
+Why can't I remember this one? Perhaps typing it here will help.
+
+   echo "foo" 1>&2
+
+== Ouput with here docs ==
+
+  cat << EOF >&2
+  this is a line
+  this is another line
+  EOF
+
+== getopts example ==
+
+  while getopts "hw:" opt; do
+        case $opt in
+             h ) hyph=1          ;;
+             w ) width="$OPTARG" ;;
+        esac
+  done
+  shift $(($OPTIND - 1)) # so we can get the other args (e.g. $1)
+
+== eval text ==
+
+  % eval $(date "+weekday=\"%a\"")
+  % echo $weekday
+  Mon
+
+  
+  
+== See Also ==
+  
+* [[Bash]] - bash tips and tricks
+* [[Unix]] - most things unix related
+  
+
+

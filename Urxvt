@@ -1,0 +1,14 @@
+== Running urxvt in daemon mode ==
+
+To use urxvtd, put the following in your <code>~/.xinitrc</code> or <code>~/.xsession</code> to start the daemon on login and exit on logout:
+
+    urxvtd -q -f -o
+
+Then you can start up <code>urxvt</code> via:
+
+     urxvtcd -name urxvt
+
+     
+[http://thened.net/nedlog/posts/urxvtd/ from thened.net] 
+
+

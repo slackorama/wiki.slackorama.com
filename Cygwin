@@ -1,0 +1,72 @@
+== Start up rxvt instead of standard cygwin ==
+
+     rxvt -g 100x50+130+100 -e /bin/bash --login -i
+            100 - windows width
+            50  - windows height
+            130 - start X
+            100 - start Y
+    
+
+== Remove case sensibility in command-line completion under bash ==
+Add to ~/.bashrc
+
+    shop -s nocaseglob
+
+Add to ~/.inputrc
+
+    set completion-ignore-case on
+
+== How do I access the C: disk from cygwin? ==
+
+From cygwin, you can get to the C: disk as /cygdrive/c/.
+For example, if you want to see the directories and
+files in the C: drive, do:
+
+     > ls /cygdrive/c
+
+To get to the "Program Files" directory in the C: drive, do:
+
+    > cd /cygdrive/c/"Program Files"
+
+If you have a Z: drive as well, then you refer to it
+as /cygdrive/z.
+
+I like this permanent solution: create a directory for each
+of your disks and mount them:
+
+    > cd /
+    > mkdir c
+    > mount c: /c
+    > mkdir d
+   > mount d: /d
+    > ...etc
+
+Now you can directly go to the c: drive, for example:
+
+    > cd /c  
+
+But WE DO NOT RECOMMEND creating and mounting "/a" above
+since "ls /" will typically fail as "a:" and generate an ugly
+sound when there is no floppy in "a:".
+
+
+== Installing cron as a service on XP ==
+    cygrunsrv -I cron -p /usr/sbin/cron -a -D
+
+== Resize window in rxvt ==
+     echo -ne '\e[8;${rows};${cols}t'".
+
+== Printing to a windows networked server ==
+     lpr -d\\\\lantsvc1\\trix
+
+== Getting matchit.vim to work in vi ==
+I had to add the following line to my .vimrc to get matchit to work properly
+in cygwin
+
+     filetype plugin index on
+
+== Running a command from windows ==
+In this example we run [vi]
+
+      C:\cygwin\bin\rxvt -e vim
+

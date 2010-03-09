@@ -1,0 +1,11 @@
+Going through the problems on project euler
+
+== Problem 1 ==
+http://projecteuler.net/index.php?section=problems&id=1
+
+Find the sum of all the multiples of 3 or 5 below 1000.
+
+    (reduce +
+           (filter #(or (= (rem % 5) 0) (= (rem % 3) 0))
+                   (range 0 1000)))
+

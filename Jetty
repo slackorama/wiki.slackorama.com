@@ -1,0 +1,19 @@
+== Debug Commands ==
+
+== Debug the launcher ==
+
+Set org.mortbay.jetty.launcher.debug equal to true
+
+    -Dorg.mortbay.jetty.launcher.debug=true
+    
+== Miscellaneous ==
+
+=== Setting cookies ===
+
+Set the version of the cookie to greater than 0, and it won't encode the cookie.  Handy if you want to put a new line in the cookie.
+
+    Cookie c = new Cookie("foo",
+        java.net.URLEncoder.encode("foo" + "\n" + "bar","UTF-8"));
+    c.setVersion(1);  // RFC 2109 cookie specficiation
+    ...
+    response.addCookie(c);

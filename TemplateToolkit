@@ -1,0 +1,12 @@
+== Dumping out variables ==
+
+[http://template-toolkit.org/docs/modules/Template/Plugin/Dumper.html
+Template::Plugin::Dumper]
+
+    [% USE Dumper %]
+    
+    [% Dumper.dump(variable) %]
+    [% Dumper.dump_html(variable) %]
+
+
+

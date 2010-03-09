@@ -1,0 +1,59 @@
+==  Best Practices ==
+
+=== perl -cw is your friend ===
+Try and run everything through <code>perl -cw</code> to see if you messed anything up.
+
+    -c  check syntax only (runs BEGIN and CHECK blocks)
+    -w  enable many useful warnings
+
+=== Use the English module ===
+Use the [http://perldoc.perl.org/English.html|English] module allows you to write something like this:
+
+     use English;
+     open my $FILE "<", $filename or die "Can't open file: $OS_ERROR";
+
+=== Use indirect filehandles to prevent filehandles from being package variables.===
+
+For versions of Perl after 5.6
+
+    open my $FILE, '<', $filename
+        or croak "Can't open '$filename': $OS_ERROR";
+
+For versions before 5.6
+
+   use Symbol qw( gensym );
+    my $FILE = gensym(  );
+    open $FILE, '<', $filename
+        or croak "Can't open '$filename': $OS_ERROR";
+
+== Things That I Forget ==
+
+=== Add directory to lib ===
+
+    use lib qw (./lib/);
+
+== Snippets ==
+
+=== Simple templating ===
+
+      my $test = "hi there %%name%%";
+      my $fillings = { name=> 'bob' };
+      $test =~ s{ %% ( .*? ) %% }
+      { exists ( $fillings->{$1} )
+       ? $fillings->{$1}
+       : ""
+      }gsex;
+
+== Debugging ==
+
+=== Reference Sheet of Most Common Commands ===
+[http://www.perl.com/2004/11/24/debugger_ref.pdf|debuffer_ref.pdf]
+
+== CPAN ==
+
+=== Forcing an install ===
+
+    perl -MCPAN -e "CPAN::Shell->force(qw(install IO::Socket::SSL));"
+
+
+

@@ -1,0 +1,15 @@
+== Make a booklet with 8 pages per page ==
+
+These are the commands you want:
+
+    scale=0.5
+    
+    psbook -s8 $1.ps 2.ps
+    pstops -pletter "8:0@$scale(0.0in,0.0in)+1@$scale(4.25in,0.0in)+6U@$scale(8.5in,11in)+7U@$scale(4.25in,11in)" 2.ps 1_$1.ps
+    pstops -pletter "8:2@$scale(0.0in,0.0in)+3@$scale(4.25in,0in)+4U@$scale(8.5in,11in)+5U@$scale(4.25in,11in)" 2.ps 2_$1.ps
+    rm 2.ps
+
+
+[http://linux.die.net/man/1/psbook psbook] will insert blank pages and order
+the pages properly.  Then [http://linux.die.net/man/1/pstops pstops] will
+scale the pages, flip and needed and then put 4 to a page so printing will work.    

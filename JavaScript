@@ -1,0 +1,98 @@
+== JSON Invalid Label ==
+If you have this:
+
+    var f = eval("{'foo':'bar'}");
+
+and you end up getting "Invalid Label", what you **REALLY** want is:
+
+    var f = eval("({'foo':'bar'})");
+
+Note the begin and end parens.
+
+[http://www.bennadel.com/blog/99-JSON-Minor-But-VERY-Important-Detail-Creating-Syntax-Error-Invalid-Label.htm|Props to bennadel.com]
+
+== Logging functions ==
+
+To add logging before and after when a function is called:
+
+   // store it...
+   ofunc = String.prototype.substr;
+   // wrap it...
+   String.prototype.substr = function() { 
+     console.log("Before");
+     v = ofunc.apply(this, arguments); 
+     console.log("After: " + v); 
+     return v; 
+   }
+
+##console.log## assumes you have Firebug installed.
+
+
+
+== Singleton Pattern ==
+
+Example of a lazily loaded singleton pattern in JavaScript
+
+    var Boo = (function() {
+    
+        // our singleton instance    
+        var instance;
+    
+        var constructor = function(id) {
+          // example of instance variable
+          this.id = id;
+          // for the closure
+          var self = this;
+          return { 
+             sayBoo: function() {
+                console.log("Ghost " + self.id + " says boo");
+             }
+          }
+        };
+        return {
+          getInstance: function() {
+             if (instance === undefined) {
+               instance = constructor("42");
+             }
+             return instance;
+          }
+        };
+    })(); // self-invoke it
+    
+    // example call
+    Boo.getInstance().sayBoo();
+
+
+And another way without the lazy initialization:
+
+    var MySingleton = function() {
+        return {
+            id: 42,
+            
+            test: function() {
+                return this.id;
+            }
+        }
+    }();
+    
+    // example call
+    MySingleton.test();
+
+== Is this value an array? ==
+
+
+   function isArray(o) {
+     return Object.prototype.toString.call(o) === '[object Array]';
+   }
+
+From [http://thinkweb2.com/projects/prototype/instanceof-considered-harmful-or-how-to-write-a-robust-isarray/ thinkweb2]    
+
+
+== Replacing HTML entities ==
+This method of doing it should be pretty fast.
+
+   // Using a function is faster than 4 regexs when there are few matches
+   var htmlCharMap = {'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;'};
+   // don't create a closure, and don't keep recreating htmlCharMap   
+   function htmlCharEsc(c) { return htmlCharMap[c]; }
+   function htmlEscape(s) { return String(s).replace(/[&<>\"]/g, htmlCharEsc);}

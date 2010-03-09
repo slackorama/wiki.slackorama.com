@@ -1,0 +1,42 @@
+== Setting up relayhost with SASL ==
+
+This worked for me on Ubuntu 9.10
+
+In `/etc/postfix/main.cf` add:
+
+    # from http://www.hserus.net/wiki/index.php/Postfix
+    myhostname = W5012714.XXXX.com
+    mydomain = XXXX.com
+    myorigin = $mydomain
+
+    # this must match what's in sasl_passwd later
+    relayhost = [smtp.XXXX.com]
+    smtp_sasl_auth_enable = yes
+    smtp_sasl_security_options = 
+    # above blank to clear default noplaintext - most ISPs
+    # support just PLAIN and LOGIN - both plaintext AUTH
+    smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+    # only bind to the localhost
+    inet_interfaces = 127.0.0.1
+
+Create `/etc/postfix/sasl_passwd` with:
+
+    [smtp.XXXX.com] smason@XXXX.com:PASSWORD
+
+
+Run postmap on the file:
+
+    sudo postmap sasl_passwd
+
+Restart postfix:
+
+    sudo /etc/init.d/postfix restart
+
+== Clearing all mail that's borked ==
+
+    sudo postsuper -d ALL deferred
+
+
+    
+
+

@@ -1,0 +1,28 @@
+== Append/replace data at end of line ==
+
+Given the data in file:
+
+    +abc.com:12.12.12.12
+    =*.abc.com:x.y.z.com:1200
+
+Use this:
+
+    awk 'BEGIN{ OFS=FS=":"}NF<3{ $0=$0":"900}NF>=3{ $NF=900}1' file
+
+
+To get:
+
+    +abc.com:12.12.12.12:900
+    =*.abc.com:x.y.z.com:900
+
+== this is a test ==
+
+
+== See also ==
+
+* [[Unix]]
+* [[Linux]]
+
+    
+
+

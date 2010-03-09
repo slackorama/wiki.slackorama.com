@@ -1,0 +1,60 @@
+== Compounding interest ==
+
+In Javascript:
+
+    var p = 100; // starting amount
+    var r = 5/100; // rate
+    var n = 20; // period
+    var c = 10;  //contributions per period
+    var amt = p * (Math.pow(1+r,n)) + (c * (Math.pow(1+r,n+ 1) - (1 + r)))/r;
+    console.log(Math.round(amt*100)/100);
+
+== APY Forumula ==
+
+   APY = (1 + r/n )n – 1 
+
+where r is the stated annual interest rate and n is the number of times you’ll compound per year.
+
+Finance people will recognize this as the Effective Annual Rate (EAR) calculation.
+
+== Open Office Spreadsheet Calculations ==
+
+=== How much you need to save per period to reach a goal ===
+
+##(PMT(RATE;PERIODS;INITIALVAL;FUTUREVAL)*-1)##
+
+== Calculating Investment Performance ==
+
+=== Quarterly Returns ===
+
+The formula is the (ending balance – ½ contributions + ½ withdrawals) divided by
+(beginning balance + ½ contribution – ½ withdrawals) minus 1. Assume your beginning balance was
+$100, the ending balance was 110, and you added $5 in the middle of the period.
+
+||Beginning Balance||Contribution||End Balance||((EB-C*.5+W*.5)/(BB+C*.5+W*.5))-1|| Return ||
+||              100  ||            5 ||       100   || (110-(5*0.5)+(0*0.5)) / (100+(5*.05-0*.05)) -1 || 0.049 = 4.9%||
+
+=== Yearly Returns ===
+
+Calculating annual return requires linking quarterly returns together. This is
+accomplished by adding a “1” to each quarterly return and multiplying them
+together, then subtracting “1” at the end. Assume the first quarter return was
+4.9%, second quarter was 1.1%, third quarter was –1.6%, and fourth quarter was
+2.0%. The return for the year is as follows:
+
+
+||||        Return||   Decimal||        Add “1”||       Multiply||
+||First||     4.9%||    .049||            1.049||           1.049||
+||Second||    1.1%||    .011||            1.011||         x 1.011||
+||Third||    -1.6%||    -.016||           0.994||         x 0.994||
+||Forth||    2.0%||     .020||            1.020||         x 1.020||
+
+Multiply four quarters and subtract 1
+
+=== Monthly Returns ===
+
+In some quarters, large a contribution or withdrawal can distort
+returns. During periods of large cash flows, it is better to link returns
+monthly to find an accurate quarterly return. To do this, calculate the quarterly return (do not subtract 1) then link the three monthly returns together and then subtract 1.
+
+

@@ -1,0 +1,69 @@
+
+== Hide and show answers on a FAQ ==
+
+    $(document).ready(function()
+        $("#faq").find("dd")
+                .hide()
+                .end()
+                .find("dt")
+                .click( function() $(this).next().slideToggle();
+        });
+    });
+
+==  Mouseout and mouseover color changes on a table ==
+Assuming the table has a class of "stripeme"
+
+    $(".stripeme").find("tr")
+                  .mouseover( function() {
+                      $(this).css( "background", "red")
+                    }).mouseout(
+                      function() {
+                       $(this).css( "background", "white")
+                       } );
+
+
+== Getting a column's worth of data from table ==
+
+The `:eq`  thing is interesting.  Does dojo support that?
+
+     function get_table_column(table, index) {
+         cells = []
+         $('tr', table).each(function() { 
+             cells.push ($('td:eq(' + index + ')', this));
+         });
+     
+         return cells;        
+     }
+
+
+== Add a class unless there is a child of a certain class ==
+
+From [http://stackoverflow.com/questions/1168864/jquery-add-class-unless-there-is-a-child-of-certain-class Stackoverflow question] 
+
+     $("div:not(:has(span.badclass))").addClass("addthisclass");
+
+== Getting every 16th element and adding a class to it ==
+
+     $("ul li:nth-child(16n)").addClass("sixteenth");
+
+== Storing data (but not on the DOM)  ==
+
+     // set some arbitrary data
+     $('#selector').data('example-property', exampleValue);
+
+     // get the value later
+     var theValue = $('#selector').data('example-property')
+
+== Spit out the HTML of an element ==
+
+    $('<div>').append(
+         $('<input class="date_picker"/>').eq(0).clone()
+    ).html();
+
+This code exists in a plugin called [http://brandonaaron.net/blog/2007/06/17/jquery-snippets-outerhtml/ outerHtml]     
+
+    
+
+== See Also ==
+
+[http://jquery.org|Documentation]

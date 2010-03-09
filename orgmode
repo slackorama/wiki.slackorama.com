@@ -1,0 +1,11 @@
+== Installing org-mode machine wide ==
+
+    sudo cp $DOWNLOAD_VERSION/lisp/*.el /usr/local/share/emacs/site-lisp
+
+or
+
+    make install-lisp
+
+from http://www.philfam.co.uk/pete/GTD/org-mode/update-org.sh
+
+

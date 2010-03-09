@@ -1,0 +1,438 @@
+
+== Glossary ==
+
+=== What are the different logins (e.g. interactive login) ===
+
+An **interactive login shell** is one where you authenticate to the system, load the shell, and run commands manually from the shell prompt. ''ssh some.server.com'' gives you an **interactive login shell**, as does logging in via the console.
+
+A **non-interactive login shell** is one where you authenticate to the system, load the shell, and run a specific series of commands automatically, after which the shell terminates. ''ssh some.server.com 'ls -l''' gives you a non-interactive login shell.
+
+An **interactive non-login shell** is what you get when you open a terminal window in X (like Konsole, xterm, eterm, etc). You're already authenticated so you don't have to put in a username and password again, but you get a prompt where you can manually type in commands.
+
+A **non-interactive, non-login shell** is what you get when you run shell scripts. You don't get a prompt, you don't have to enter a username or password, but a shell runs for you.
+
+== Code Snippets (a.k.a Unix commands that I always seem to forget....) ==
+
+=== Repeating words from the current command ===
+
+All arguments:
+
+    !#*
+
+First argument:
+
+     !#^
+
+Last argument:
+
+     !#$
+
+Argument ''n''
+
+    !#n
+
+
+=== Unzipping a ~tar.gz file ===
+
+    tar zxvf ~somefile.tar.gz
+
+=== Unzipping a tar.gz file to different directory ===
+
+    tar zxvf somefile.tar.gz -C some/other/dir
+    
+
+=== Unzipping a ~tar.bz2 file ===
+
+    tar jxvf ~somefile.tar.bz2
+
+=== Download and unzip in one command ===
+
+    curl http://wordpress.org/latest.tar.gz | tar xvz
+
+=== Using mail to send something from a script ===
+
+  echo "some message" | \bin\mail -s "some subject" ''emailaddress''
+
+=== Doing something on each line of a file ===
+
+  while read channel_id
+     do
+     ...do something here
+  done < somefile
+
+=== How to over-ride an alias ===
+
+For example, if you have ##alias rm=rm -i##, you can override the alias
+instruction use a ##\## before, ie ##\rm## will call the real ##rm## not the alias.
+
+=== Listing directories in a file ===
+
+     ls -d */
+
+=== Print out path elements one per line  ===
+
+     echo $PATH | tr ':' "\n"
+
+=== Find examples ====
+
+==== Find UNIX files modified within a number of days ====
+
+To find all files modified within the last 5 days:
+
+   find / -mtime -5 -print
+
+The ##-## in front of the 5 modifies the meaning of the time as "less than
+five days." The command:
+
+    find / -mtime +5 -print
+
+displays files modified more than five days ago. Without the ##+## or ##-##, the command would find files with a modification time of five days ago, not less or more.
+
+==== Find files and remove them ====
+
+    find . -name "*.old" -print | xargs rm
+
+==== Find files matching a pattern using OR ====
+
+    find . \( -name "vids*.html" -o -name "imgs*.html" \) -print
+
+====  Find files that are not in a certain directory ====
+
+    find . -path "*/.svn/*" -prune -o -type f -print
+
+or
+
+    find . -path '*/.svn' -prune -o -type f -print | xargs -e grep -I -n -e PATTERN
+
+=== Helpful ls switches ====
+
+[http://www.mkssoftware.com/docs/man1/ls.1.asp For more info]
+
+==== Sort by create date ====
+
+    ls -c -t
+    
+==== Display sizes in an easier format ====
+
+    ls -h
+    
+==== Display permissions, links, owner, group, size, time, name ====
+
+    ls -l
+    
+==== List all entries including those starting with a period (.) ====
+
+    ls -a
+
+=== Stop a job from running if it's already running ===
+
+    HOWMANYOFME=`pgrep -f $0 | wc -l`
+    echo "I see $HOWMANYOFME of me"
+    if [ "$HOWMANYOFME" -gt 2 ]; then
+        echo "Too crowded"
+        exit
+    fi
+
+=== Debugging a shell script ===
+
+Turn on shell tracing with:
+
+    % /bin/sh -x `somecommand'
+
+For example:
+
+    % /bin/sh -x `which ant`
+
+=== Base conversion with shell arithmetic ===
+
+Say you have some number but, in your script, you need to work on it in another base. Automating this conversion is done easily with shell arithmetic. One way is to use shell arithmetic to convert a number from a given base to decimal. If a number is given in an arithmetic expansion, it's assumed to be in decimal notation unless it's prefaced by a either a zero -- in which case it's assumed to be in octal -- or 0x -- in which case it's assumed to be in hexadecimal. Type the following to get decimal output for some octal and hex values:
+
+     $ echo $((013))
+     $ echo $((0xA4))
+
+You can also specify any arbitrary base between 2 and 64 with the following format:
+     
+     $((BASE#NUMBER))
+
+Try converting numbers in binary, octal, hex, and other bases to decimal by
+typing the lines shown below.
+
+     echo $((2#1101010))
+     echo $((8#377))
+     echo $((16#D8))
+     echo $((12#10))
+     echo $((36#ZZYY))
+
+
+
+=== Grep ===
+
+==== Match words ====
+
+The \&lt; and \&gt; enclosures are useful pattern builders: They enclose a whole word to be matched -- they won't match an enclosed pattern unless that pattern is a word of its own. A word is defined as any number of word-forming characters (numbers, letters, and the underscore characters) that are delineated by a nonword character on both sides. Nonword characters include any of the following:
+
+* The beginning of the line
+* A whitespace character
+* A punctuation character
+* The end of the line
+* Any other character excluding letters, numbers, or the underscore
+
+These enclosures can be a great timesaver, but they're often underutilized -- probably because not every regexp implementation supports them. If yours does, get in the habit of using them.
+
+Enclose a word to match that word alone, like so:
+
+     <system>
+
+The regexp in this example won't match the word ecosystem, systemic, or system/70, nor will it match lines where the pattern system appears just anywhere on the line -- it will only match those lines where system exists as a word of its own.
+
+Combine the enclosures with groupings in parentheses to match parts of words.
+
+To match lines containing words that begin with pre, use:
+
+    <\(pre\).*>
+
+The preceding example matches lines containing the words preface and preposterous, but not spread or Dupre.
+From [http://www-128.ibm.com/developerworks/aix/library/au-expressions.html?ca=drs-tp2906|Hone your regexp pattern-building skills]
+
+=== Deal with CTRL and ^M problems ===
+
+   find . -type f | xargs file | grep CRLF | awk -F: '{print $1}' | xargs dos2unix
+
+=== Setting default values for variables ===
+
+    : ${Host:=`uname -n`}
+
+This means: if the variable "Host" is
+not already set, execute the command
+"uname -n" and set the variable to
+the returned value.
+
+=== System activity reporter ===
+
+[http://bama.ua.edu/cgi-bin/man-cgi?sar+1|man page]
+
+    sar -P ALL
+
+You can get memory stats
+
+    sar -r
+
+Swap stats
+
+    sar -B
+    sar -W
+
+and socket
+
+    sar -n SOCK
+
+Other useful command is
+
+    vmstat -S M 5
+
+===  rysnc ===
+
+====  sudo rsync -vaxE --delete --ignore-errors / /backup ====
+
+    -v verbose
+    -a archive mode
+    -x don't cross filesystem boundaries
+    -E copy extended attributes
+    --delete delete files that don't exist on the sending side
+
+===  disk usage ===
+
+====  find total usage for directories ====
+
+    du -hs ./*
+
+==== Pretty print directory usage of top 20 ====
+
+    du  -bs * |  sort -n -r | awk  -f du.awk | head -20
+
+File du.awk:
+
+    { size=$1*512;
+      unit="B";
+      if (size >= 1024) 
+      {
+        size = size /1024;
+        unit="KB";
+      }
+      if (size >= 1024) 
+      {
+        size = size /1024;
+        unit="MB";
+      }
+      if (size >= 1024) 
+      {
+        size = size /1024;
+        unit="GB";
+      }
+        printf "%6.1f %s \t %s\n",  size, unit, $2; 
+    }
+
+From [http://nl.ijs.si/gnusl/tex/tunix/tips/node84.html here]  
+
+
+
+
+
+
+== curl ==
+
+=== Useful Switches ===
+
+==== -o/--output <file> ====
+
+Write  output  to  <file> instead of stdout. If you are using {} or [] to
+fetch multiple documents, you can use '#' followed by a number in the <file>
+specifier. That variable will be replaced with the current string for the URL
+being fetched.
+
+Like in:##curl http://{one,two}.site.com -o "file_#1.txt"##
+
+or use several variables like:##curl http://{site,host}.host[1-5].com -o
+"#1_#2"##
+
+You may use this option as many times as you have number of URLs.
+See also the ##--create-dirs## option to create the local directories dynamically.
+
+==== -i/--include ====
+
+(HTTP) Include the HTTP-header in the output. The HTTP-header includes things
+the document, HTTP-version and more...
+
+If this option is used twice, the second will again disable header include.
+
+==== -I/--head ====
+
+(HTTP/FTP/FILE) Fetch the HTTP-header only! HTTP-servers feature
+the command HEAD which this uses to get nothing but  the  header
+of  a  document.  When used on a FTP or FILE file, curl displays
+the file size and last modification time only.
+
+If this option is used twice,  the  second  will  again  disable
+header only.
+
+==== -L/--location ====
+
+(HTTP/HTTPS) If the server reports that the requested page has a
+different location (indicated with the  header  line  Location:)
+this  flag will let curl attempt to reattempt the get on the new
+place. If used together with -i/--include or -I/--head,  headers
+from  all  requested  pages  will be shown. If authentication is
+used, curl will only send its credentials to the  initial  host,
+so if a redirect takes curl to a different host, it won't intercept 
+the user+password. See also --location-trusted  on  how  to
+change this.
+
+If  this  option  is  used  twice, the second will again disable
+location following.
+
+
+
+=== Examples ===
+
+===== Sending an XML Post Request =====
+
+    curl \
+      -i \
+      -X POST \
+      -H 'Content-Type: application/xml' \
+      -d '<book><title>a title</title><description>a description</description></book>' \
+      http://localhost:3000/books/
+
+== Screen ==
+
+===  Documentation ===
+
+[http://www.hmug.org/man/1/screen.php Link]
+
+===  Some Commands ===
+
+    C-a-d  Detach from screen
+    C-a-n  Next screen
+    C-a-p  Previous screen
+    C-a-A  Name current screen
+
+== Files ==
+
+===  Convert encoding on files ===
+
+For example, ISO-8859-1 to UTF-8
+
+     iconv -f ISO-8859-1 -t UTF-8 file > foo
+
+== Logging ==
+
+===  Log to either a file or stdout ===
+
+This might not be the best way but it works.  By passing in an argument in the first position, it'll log the echo to stdout
+
+  #!/bin/sh
+  LOGFILE=logfile.txt
+  if [ ! -z "$1" ]; then
+      exec 6>&1
+      exec > $LOGFILE
+  fi
+  echo "FOO"
+
+== Port Fun ==
+
+===  Find out what's listening on a port ===
+
+    lsof -i :PORT
+   
+===  To see all the ports open for listening upon the current host ===
+    
+    netstat -a |grep LISTEN |grep -v unix
+
+===  Info ===
+
+[http://www.debian-administration.org/articles/184 Link]
+
+== Find symlinks in directories ==
+
+    ls -lR <dirname> | grep "^l"
+
+== fstab fun ==
+
+===  To basically reload your fstab, run: ===
+
+     sudo mount -a
+
+===  To get uuid for a volume: ===
+
+     vol_id -u /dev/sda7
+
+== Applying a patch ==
+
+     cd /path/to/files
+     patch -Np1 < your_patch
+
+== Grep to show entire file with only matches highlighted ==
+
+    egrep --color "pattern|$" file
+
+or
+
+    grep --color -E "pattern|$" file
+
+    
+
+[http://stackoverflow.com/questions/981601/colorized-grep-viewing-the-entire-file-with-highlighting/981831#981831
+From Stackoverflow]
+
+== Copying files while excluding some ==
+
+Here's an example of skipping CVS dirs.
+
+    tar -cpf - --exclude=CVS directory | sh -c 'cd /wherever/it/goes && tar -xpf -'
+
+== See Also ==
+
+* [[Scripts]] - tips for writing scripts in *nix
+
+
+

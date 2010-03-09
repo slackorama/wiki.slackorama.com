@@ -1,0 +1,41 @@
+== Use wininfo to get window information ==
+
+     xwininfo
+
+[http://www.google.com/search?q=xwininfo|Search for xwininfo]
+
+== Reload .Xresources ==
+
+    xrdb -load ~/.Xresources
+
+==  Another handy utility ==
+
+    xprop
+
+==  Disable the system bell ==
+
+Stick this in your ##.xsessionrc## or ##.xinitrc## file.
+
+   xset b off
+
+
+== Fun with xrandr ==
+
+From http://en.opensuse.org/Multiple_Screens_Using_XRandR
+
+    xrandr --auto --output VGA-0 --mode 1680x1050 --output LVDS --off 
+
+simply turns on only the external VGA.
+
+
+    xrandr --auto --output VGA-0 --mode 1680x1050 --right-of LVDS
+
+turns on both monitor, the external widescreen monitor is right of the notebook
+
+     xrandr --auto --output VGA-0 --off
+
+turns off the external monitor, only the internal is still on.
+
+     xrandr --auto --output VGA-0 --mode 1024x768 --same-as LVDS
+
+returns to "classic" clone mode. The "--auto" on all those commands turns on all available monitor, so that the system is in an defined state.

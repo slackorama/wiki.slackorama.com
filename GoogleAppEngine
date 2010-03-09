@@ -1,0 +1,14 @@
+== Remove trailing slash ==
+
+    class BaseRequestHandler(webapp.RequestHandler):
+        def initialize(self, request, response):
+            webapp.RequestHandler.initialize(self, request, response)
+            if request.path.endswith("/") and not request.path == "/":
+                redirect = request.path[:-1]
+                if request.query_string:
+                    redirect += "?" + request.query_string
+                return self.redirect(redirect, permanent=True)
+
+From [http://www.benjamingolub.com/e/remove-trailing-slash-on-app-engine
+Benjamin Golub's site]                 
+

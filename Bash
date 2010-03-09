@@ -1,0 +1,85 @@
+== Determine if you are running interactively
+
+Use the following case  statement:
+
+ #!/usr/bin/env bash
+         
+ case "$-" in
+    *i*) # Code for interactive shell here
+         ;;
+    *)   # Code for non-interactive shell here
+         ;;
+ esac
+
+== Looping ==
+
+=== Using C-like Syntax ===
+
+  for ((a=0; a<10;a++))
+  do
+    echo "$a"
+  done
+
+
+=== Over numbers ===
+
+  for a in {1..10}
+  do
+    echo "$a"
+  done
+
+
+=== Over files ===
+
+  for file in * # *.jar or the sort will work as well
+  do
+    echo "$file"
+  done
+
+=== Loop over arguments passed to script ===
+
+Use <tt>$@</tt> so that it can be quoted.
+
+  for FN in "$@"
+  do
+      echo changing "$FN"
+      chmod 0750 "$FN"
+  done
+  
+== mkdir fun ==
+
+=== Create multiple directories at same time ===
+
+   mkdir /home/slackorama/{"foo","bar","baz"}
+
+or
+
+   mkkdir -p foo/{"foo","bar","baz"}/hi
+
+= Quickly backup a file =
+
+    cp filename{,.bak}
+
+== File negation when listing ==
+
+    ls !(index.html)
+
+From
+[http://stackoverflow.com/questions/1313590/bash-copy-all-files-except-one
+StackOverflow]
+
+== Bash inheritance?  AKA how to over-ride methods ==
+
+An example:
+
+    $ theirfunc() { echo "do their thing"; }
+    $ eval "$(echo "orig_theirfunc()"; declare -f theirfunc | tail -n +2)"
+    $ theirfunc() { echo "do my thing"; orig_theirfunc; }
+    $ theirfunc
+    do my thing
+    do their thing
+
+== See Also ==
+
+* [[Scripts]] - tips for writing scripts in *nix
+

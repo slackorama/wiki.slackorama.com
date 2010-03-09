@@ -1,0 +1,11 @@
+== Scheme and Emacs ==
+
+   * Install quack http://www.neilvandyke.org/quack/quack.el to ~/.emacs.d/lisp
+   * Install plt-scheme `sudo apt-get install plt-scheme`
+   * Run in emacs via `scheme-mode`
+
+
+== Links ==
+
+ * [http://bc.tech.coop/scheme/scheme-emacs.htm Bill Clementson's setup]    
+

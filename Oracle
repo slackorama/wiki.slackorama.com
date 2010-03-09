@@ -1,0 +1,254 @@
+== Find the db links ==
+
+ select * from user_db_links;
+ select * from dba_db_links;
+
+==  Using variables in your scripts ==
+
+===  Basics ==
+
+; ##&##: defines a temporary variable
+; ##&&##: defines a permanent variable
+
+=== To undefine a variable ===
+
+Where 'variablename' is the name you want to redefine
+
+    undef variablename
+
+=== Helpful Link ===
+
+[http://orafaq.com/node/515|Spice up your SQL Scripts with Variables]
+
+== Get Oracle product version ==
+
+    select * from product_component_version;
+
+== Dates and times ==
+
+The general usage of TO_CHAR is:
+
+TO_CHAR(<date>, '<format>')
+
+where the <format> string can be formed from over 40 options. Some of the more popular ones include:
+  , for example.
+||MM||Numeric month (e.g., 07)||
+||MON||Abbreviated month name (e.g., JUL)||
+||MONTH||Full month name (e.g., JULY)||
+||DD||Day of month (e.g., 24)||
+||DY||Abbreviated name of day (e.g., FRI)||
+||YYYY||4-digit year (e.g., 1998)||
+||YY||Last 2 digits of the year (e.g., 98)||
+||RR||Like YY, but the two digits are ``rounded'' to a year in the range 1950 to 2049. Thus, 06 is considered 2006 instead of 1906||
+||AM||(or PM) 	Meridian indicator||
+||HH||Hour of day (1-12)||
+||HH24||Hour of day (0-23)||
+||MI||Minute (0-59)||
+||SS||Second (0-59)||
+
+[http://www-db.stanford.edu/~ullman/fcdb/oracle/or-time.html|Oracle Dates and Times]
+
+== Using JPub for queue stuff ==
+
+    **jpub** 
+       -user=username/password 
+       -sql=some_message_type:SomeClass 
+       -usertypes=oracle 
+       -methods=false 
+       -url=jdbc:oracle:some.host:1521:db 
+       -package=com.package.foo
+
+[http://www.oracle.com/technology/sample_code/tech/java/sqlj_jdbc/files/advanced/objectjavasample/readme.html#JPub|more info]
+
+Used this for [http://www.akadia.com/services/ora_advanced_queueing.html#Queue%20Creation%201|Oracle Advanced Queueing]
+
+== Add comments to a table or column ==
+
+Add a comment to the data dictionary:
+
+Syntax:
+
+   COMMENT ON TABLE [schema.]table IS 'text'
+   COMMENT ON TABLE [schema.]view IS 'text'
+   COMMENT ON TABLE [schema.]materialized_view IS 'text'
+    
+   COMMENT ON COLUMN [schema.]table.column IS 'text'
+   COMMENT ON COLUMN [schema.]view.column IS 'text'
+   COMMENT ON COLUMN [schema.]materialized_view.column IS 'text'
+
+To drop a comment from the database, set it to the empty string ' '.
+
+== find out the details of a constraint ==
+
+   select * from user_constraints where constraint_name = 'CONSTRAINT_NAME_HERE'
+
+== Session information from Oracle ==
+
+Get information like what machines are connected to the db
+
+    select * from v$session
+
+== Strip out newline characters in varchars ==
+
+      select replace(val,chr(13)||chr(10)) from some-table
+
+
+== How does one disable interactive prompting in SQL*Plus? ==
+
+If you run a script that contains "&" symbols, SQL*Plus thinks that you want to prompt the user for a value. Some clients allow one to escape the ampersand characer with a backslash, however, that doesn't work from SQL*Plus. Here is a couple of solutions:
+
+    SET ESCAPE ON
+    SET ESCAPE "\"
+    SELECT 'You \& me' FROM DUAL;
+    
+or
+
+    SET DEFINE ?
+    SELECT 'You & me' FROM DUAL;
+
+Atanas Kebedjiev provided this solution:
+
+    SELECT 'You '||Chr(38)||' Me' FROM DUAL;
+
+Note: You can disable substitution variable prompting altogether by issuing the ##SET DEFINE OFF## command.
+
+== How does one escape special characters when building SQL queries? ==
+
+The ##LIKE## keyword allows for string searches. The '_' wild card character
+is used to match exactly one character, '%' is used to match zero or more
+occurrences of any characters. These characters can be escaped in
+SQL. Example:
+
+       SELECT name FROM emp WHERE id LIKE '%\_%' ESCAPE '\';
+
+Use two quotes for every one displayed. Example:
+
+        SELECT 'Franks''s Oracle site' FROM DUAL;
+        SELECT 'A ''quoted'' word.' FROM DUAL;
+        SELECT 'A ''''double quoted'''' word.' FROM DUAL;
+
+== Performance Tuning ==
+
+=== Running tkprof ===
+
+    tkprof input_tracefile.trc output1.txt sys=no explain=userid/pwd sort=prsela, exeela, fchela
+
+=== Code instrumentation ===
+
+Will generate a tracefile on the db server:
+
+    alter session set tracefile_identifier='id-of-tracefile';
+    alter session set statistics_level=all;
+    alter session set "_rowsource_execution_statistics"=true;
+    alter session set events '10046 trace name context forever, level 12';
+    *****place query here*****
+    exit;
+    
+== Dictionary Releated Queries ==
+
+=== Get a list of all dictionary tables with their comments ===
+
+    select table_name, comments
+      from dictionary
+    order by table_name;
+
+=== Get the columns of a table with their comments ===
+
+    select column_name, comments
+        from dict_columns
+    where table_name = 'ALL_TAB_COLUMNS';
+
+==  Queue Related Queries ==
+
+=== Get List of Subscribers ===
+
+   select 
+     queue_name,
+     consumer_name 
+   from 
+     user_queue_subscribers;
+
+== RecycleBin in 10g ==
+
+=== Purge that sucker ===
+
+    PURGE recyclebin;
+
+==  Benchmarking code ==
+
+
+    SET serveroutput ON
+      DECLARE
+        nLoops CONSTANT NUMBER := 1000000;
+        nStart NUMBER;
+        val DATE;
+      BEGIN
+        dbms_output.enable(buffer_size => 10000);
+        nStart := dbms_utility.get_time();
+        FOR i IN 1..nLoops
+        LOOP
+--              val := ssm_epoch_to_date(0);
+                val := epoch_to_date(0);
+        END LOOP;
+        dbms_output.put_line('time: ' || ROUND((dbms_utility.get_time() - nStart)/100, 3) || ' s');
+
+        nStart := dbms_utility.get_time();
+        FOR i  IN 1..nLoops
+        LOOP
+                val := to_date('01/01/1970','MM/DD/YYYY') + (0/(60 * 60 * 24));
+        END LOOP;
+        dbms_output.put_line('time: ' || ROUND((dbms_utility.get_time() - nStart)/100, 3) || ' s');
+END;
+
+==  Plan For Fun and Profit ==
+
+    set echo on
+    
+    delete from plan_table
+     where statement_id = 'ssm_qry';
+    commit;
+    COL operation   FORMAT A30
+    COL options     FORMAT A15
+    COL object_name FORMAT A20
+    EXPLAIN PLAN set statement_id = 'ssm_qry' for
+    -- ************************************************
+    -- PUT YOUR SQL HERE
+    -- ************************************************
+    
+    -- Arguments to dbms_xplan.display: 
+    --  * table
+    --  * statement_id
+    --  * format:  'TYPICAL','BASIC', 'ALL', 'SERIAL'.
+    select * from TABLE(dbms_xplan.display('PLAN_TABLE','ssm_qry','BASIC'));
+    
+    set echo off
+
+== Using SQLPlus in non-painful manner ==
+
+<code>rlwrap</code> to the rescue.
+
+First:
+
+    $ touch ~/sql.dict
+
+and add this alias to your .bashrc
+
+    alias sqlplus='rlwrap -b "" -f $HOME/sql.dict sqlplus'
+
+and presto, sqlplus with readline functionality.
+
+    $ sqlplus spotrc@spotrc
+
+Once inside sqlplus, run:
+
+    set lin 155
+    set pagesize 1000
+
+== Turn on timing ==
+
+    SQL> set timing on
+    SQL> set timing off
+    
+
+
+

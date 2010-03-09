@@ -1,0 +1,167 @@
+
+== Getting length of a list ==
+
+    >>> l = ['four','five','six']
+    >>> len(l)
+    3
+
+== Mapping a list ==
+
+This is kind of counter-intuitive (to me) but you need to call `join` on the
+string you will be joining with:
+
+    >>> li = ['a','b','c']
+    >>> ' - '.join(li)
+    'a - b - c'
+
+== Emptying a list ==
+
+   del li[:]
+
+This actually removes the contents from the list, not replaces the old label
+with a new empty list.  For example:
+
+    >>> li = [1,2,3]
+    >>> l2 = li
+    >>> del li[:]
+    >>> l2
+    []
+    >>> li
+    []
+
+== Cartesian product of two lists ==
+
+Here's the mathematical formula:
+
+    A × B = {(a,b) | a ∈ A and b ∈ B }
+
+And here's how to do it with list comprehensions:    
+
+    >>> def cross(A, B):
+            return [a+b for a in A for b in B]
+    >>> cross('abc','123')
+    ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
+        
+    
+== Getting help at the REPL ==
+
+    help()      # run plain ol' help
+    help(pydoc) # get help for pydoc
+    help(dir)   # get help for the dir method
+
+== Pickle for fun and profit ==
+
+    >>> import pickle
+    >>> arr = [1,2,3]
+    >>> p = pickle.dumps(arr)
+    >>> nee = pickle.loads(p)
+    >>> nee[0]==arr[0]
+    True
+    >>> len(nee)==len(arr)
+    True
+
+== Decorators ==
+
+Using a method:
+
+    def entryExit(f):
+        def new_f():
+            print "Entering", f.__name__
+            f()
+            print "Exited", f.__name__
+        return new_f
+    
+    @entryExit
+    def func1():
+        print "inside func1()"
+    
+    @entryExit
+    def func2():
+        print "inside func2()"
+
+== Counting occurrences of regex in string ==
+
+    >>> s = 'one %s three %s four %2'
+    >>> r = re.compile(r'\%s')
+    >>> len( r.findall(s))
+    2
+
+== Running doctests ==
+
+Assuming a module `foo` like this:
+
+    class Foobar(object):
+    
+       def foobar(self ):
+          """
+          Here is a doctest for fun AND profit!!
+          
+          >>> foo.Foobar().foobar()
+          fun
+    
+          
+          """
+          print "fun"
+
+
+   >>> import unittest
+   >>> import doctest
+   >>> suite = unittest.TestSuite()
+   >>> suite.addTest(doctest.DocTestSuite('foo'))
+   >>> unittest.TextTestRunner(verbosity=2).run(suite)
+   Doctest: foo.Foobar.foobar ... ok
+
+   ----------------------------------------------------------------------
+   Ran 1 test in 0.001s
+
+   OK
+   <unittest._TextTestResult run=1 errors=0 failures=0>
+   >>>    
+
+== A Simple CGI  ==
+
+     #!/usr/bin/env python
+     
+     import cgi
+     # for better error messaging to browser
+     import cgitb
+     cgitb.enable()
+          
+     print "Content-type: text/html\n\n"
+     
+     form = cgi.FieldStorage()
+     
+     if form.has_key('name'):
+         print "hi %s" % form['name'].value
+     else:
+         print "I got nothing!"
+
+== Printing a tuple ==
+
+    >>> thetuple = (1, 2, 3)
+    >>> print "this is a tuple: %s" % (thetuple,)
+    this is a tuple: (1, 2, 3)
+         
+== Find where site-packages are stored ==
+The location of the site-packages directory depends on the operating system, and the location in which Python was installed. To find out your system’s site-packages location, execute the following:
+
+    python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+
+== IDLE Problems ==
+
+=== Won't start on Windows XP because of `TkInter` ===
+
+This may affect other OSs but I've only seen it happen on Windows XP when you
+have ruby installed.  I fixed it by unsetting my TCL_LIBRARY environment
+variable.
+
+      set TCL_LIBRARY
+
+== easy_install ==
+
+=== Alternate installations ===
+
+For systems where you aren't admin,
+[http://peak.telecommunity.com/DevCenter/EasyInstall#creating-a-virtual-python
+creating a virtual python]  seems like the best way.      
+

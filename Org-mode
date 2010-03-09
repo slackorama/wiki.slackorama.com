@@ -1,0 +1,5 @@
+== Installation ==
+
+On debian based system, '<pre>make install-info</pre>' will fail.  You need to
+change '<pre>INFO_INSTALL</pre>' to use '<pre>ginstall-info</pre>.'
+

@@ -1,0 +1,276 @@
+== Debugging Tricks ==
+
+=== Tracking program execution ===
+
+    dojo.require('dojox.lang.aspect'); 
+    dojo.require('dojo.lang.aspect.tracer'); 
+    var aop = dojox.lang.aspect;
+    aop.advise( stackStore,
+                /^((?!toString|rowRemoved).)*$/,
+                new aop.tracer(true));
+    stackStore.revert();
+
+
+=== Use window.location.search to enable Firebug Lite on the fly ===
+
+From
+[http://www.sitepen.com/blog/2008/11/10/dojo-and-firebug-tricks-for-development/
+SitePen.com]
+
+Use <tt>djConfig</tt> object:
+
+    var djConfig = { isDebug: (window.location.search.indexOf("debug")>-1) };
+
+What you are basically saying is “if you find the term ‘debug’ on the query
+string for the page, then enable debugging with Dojo”.
+
+Then, you just need to visit:
+
+     http://your.site/foo.html?debug
+
+and you have the console available.     
+
+== General ==
+
+=== Only parsing certain areas of page ===
+
+*Only works in version < 0.9*
+
+     <script type="text/javascript">
+          djConfig = { 
+          isDebug:false,
+          parseWidgets:false,
+          searchIds:["mainTabContainer","dashboard_datepicker"]
+          };
+    </script>
+    <script type="text/javascript" src="/js/dojo/dojo.js"></script>
+
+=== dojo.query example ===
+
+    dojo.query('ul.dashboard_chart_tabs li').forEach(function(tab){
+       ... do something here...
+    }
+
+[http://docs.dojocampus.org/dojo/query dojo.query documentation (with CSS
+selectors list)]
+
+
+
+== Dojo 0.4 ==
+
+=== Attaching an onClick event to an element ===
+
+    dojo.event.connect(dojo.byId("activity-date-link"),"onclick",function(ev) { alert("hi"); });
+
+=== Stopping a browser event from propagating up ===
+
+    dojo.event.connect(dojo.byId("activity-date-link"),"onclick",function(ev)
+    {
+      dojo.event.browser.stopEvent(ev);
+    });
+
+=== AJAX ===
+
+==== Submitting a post request to a service the returns JSON ====
+
+    def = { url: "jsonservice",
+        load: function(e,d,t) { 
+                 console.log(d.data.summary.bounce_hard); 
+              },
+        mimetype: "text/json",
+        // not the array for the param
+        content: { metric: ["recv_count", "bounce_hard"],
+                   filterstr: "1025;119063;=;number~|&",
+                  }
+        method: "POST"
+    };
+    dojo.io.bind( def );
+
+== Dojo 1.0 ==
+
+=== Core ===
+
+==== Extending dojo.query ====
+
+Here's a way to extend dojo.query to do something like jQuery's next/previous.
+pre? code?
+
+    dojo.NodeList.prototype.next = function(f){
+      var r = new dojo.NodeList();
+      this.forEach(function(i){
+        var n = i.nextSibling;
+        while(n && n.nodeType != 1){
+          n = n.nextSibling;
+        };
+        if(n){ r.push(n); }
+      });
+      if(f){ r = r.filter(f); }
+      return r;
+    };
+
+
+via slightlyoff in #dojo.
+
+==== Array fun ====
+
+Pass in an object for a context in the callback function
+
+    var obj = {
+       foo: 2
+    };
+    function filt(val) {
+       if (val > this.foo) {
+          console.log( val );
+       }
+     }
+     dojo.filter([[1,2,3]],filt,obj); // => 3
+
+==== Publish/subscribe ====
+
+Here's an example using behavior and publish
+
+  dojo.require("dojo.behavior");
+  var ev = function () { console.log("event fired");
+    console.log(arguments);
+  };
+  dojo.subscribe("/foo",null,ev);
+  dojo.behavior.add( { ".fake": { "onclick": "/foo"} });
+  dojo.behavior.apply();
+
+Not quite sure what the advantage of this over dojo.connect.
+
+==== dojo.hitch ====
+
+Here's an example of currying.
+
+    dojo.declare("Fake",null,{
+       doSomething: function(a, b) {
+         console.log( a, " ", b);
+       }
+    });
+    f = new Fake();
+    func = dojo.hitch(f,"doSomething","this is a");
+    func("this is b");
+
+=== AJAX ===
+
+==== Using dojo.xhr ====
+
+     dojo.xhrGet({ 
+       url: "/cm/service", 
+       load: function(data) { console.log(data) },
+       error:function(data) { console.log("ERROR"); console.log(data); }, 
+       handleAs:"json" 
+    });
+
+==== Using dojo.io.script ====
+
+    dojo.require('dojo.io.script');
+    dojo.io.script.get({ url: 'http://search.yahooapis.com/WebSearchService/V1/webSearch', 
+    checkString: "foobar",
+    content: {
+            appid: "DEMO",
+            query: "dojo",
+            output:'json'},
+    timout:1000,
+    callbackParamName: 'callback',
+    load: function(result) {
+       console.log(result)
+    },
+    error: console.error
+    });
+    
+=== DOM fun ===
+
+==== Remove items from a list ====
+
+    dojo.query("#global-menu li.*").orphan()
+
+==== Replacing Elements in the DOM ====
+
+Replace the fifth div in the page with 'o hai'
+
+     var hai = document.createElement('div');
+     hai.innerHTML = 'o hai';
+     // nodelist is zero based
+     var gone = dojo.query('div')[4];
+     dojo.place( hai, gone, "before" );
+     dojo.query( gone ).orphan();
+
+=== Weirdness ===
+
+==== Widgets are transparent or have no theme applied to them: ====
+So, you need to do this.  Can't understand why exactly:
+
+    var theme = 'tundra';
+    if(!dojo.hasClass(dojo.body(),theme))
+    {
+            dojo.addClass(dojo.body(),theme);
+    }
+
+== Documenting Dojo ==
+
+=== With JSDOC ===
+
+Using http://code.google.com/p/jsdoc-toolkit
+
+    /**
+     * @name Tools.Dom
+     * @namespace */
+    dojo.provide("Tools.Dom");
+    
+    /**
+     * Hey! this is a class! (this won't show up in docs).
+     */
+    dojo.declare("Tools.Dom.Foobar",null,
+             /**
+              * @lends Tools.Dom.Foobar.prototype
+              **/
+             {
+    
+               /**
+                * This is the constructor
+                * @class Here is a description about the class
+                *        that goes on and on and on?
+                * @constructs
+                */
+               constructor: function(fake) {
+               },
+    
+               /**
+                * This is a very very sexy method!
+                */
+               someMethod: function(woo) {
+    
+               },
+               /** @private */
+               _foobar: function(meep) {
+    
+               }
+    
+             });
+
+Run via:
+    
+     java -jar jsrun.jar app/run.js -t=templates/jsdoc/ -p -a /tmp/fark.js
+
+== Drag and Drop (dnd) ==
+
+=== How it works generally ===
+As soon as you start dragging on a dojo.dnd.Source, it goes through all the
+possible targets and checks to see if it's an acceptable one.  This is done in
+dojo.dnd.Source.
+
+Acceptance is determined by the <code>type</code> of the source item(s) and
+the <code>accepts</code> of the target.
+
+==== See Also ====
+[http://docs.dojocampus.org/dojo/dnd]  
+
+
+
+
+     
+
+
+

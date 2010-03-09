@@ -1,0 +1,41 @@
+== Shortcut Keys ==
+=== In Windows ===
+||**Keys**       ||**Command**||
+||CTRL+SHIFT+R   ||Open Resource||
+||CTRL+SHIFT+T   ||Open Type||
+||CTRL+J         ||Incremental Search||
+||Ctrl+F6        ||Switch between last used files||
+||F3             ||Open declaration||
+||Ctrl+Alt+H     ||Open Call Hierarchy||    
+||CTRL+1         ||Quick Fix||
+||Ctrl+Space     ||Context Assist||
+||Ctrl+Shift+F   ||Reformat source||
+
+
+=== Java ===
+
+||**Keys**       ||**Command**||
+||Ctrl+Shift+O   ||Organize Imports||
+
+=== Refactor - Java ===
+
+||**Keys**       ||**Command**||
+||Alt+Shift+T    ||Show Refactor Quick Menu||
+
+=== Debugging ===
+
+||**Keys**       ||**Command**||
+||F5           ||Step Into||
+||F6           ||Step Over||
+||F7           ||Step Return||
+||F8           ||Resume||
+||SHIFT+F5     ||Use Step Filters||
+||CTRL+R       ||Run to Line||
+||CTRL+F11     ||Run Last Launched||
+||F11          ||Debug Last Launched||
+||CTRL+SHIFT+I ||Inspect||
+||CTRL+SHIFT+D ||Display||
+||CTRL+U       ||Execute||
+
+
+

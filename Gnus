@@ -1,0 +1,21 @@
+== Where are SCORE files kept? ==
+
+Look at the value of 'gnus-kill-files-directory'
+
+== Inserting and marking files and regions ==
+
+    C-c M-f         message-mark-insert-file
+    C-c M-m         message-mark-inserted-region
+
+This will result in something like:
+
+    --8<---------------cut here---------------start------------->8---
+    
+    this is some text
+    
+    --8<---------------cut here---------------end--------------->8---
+
+[http://gnus.org/manual/message_21.html Manaul about inserting]     
+
+
+

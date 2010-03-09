@@ -1,0 +1,9 @@
+[http://www.emacswiki.org/emacs/JavaScriptMode#toc1 Espresson mode on Emacswiki]
+
+== Features ==
+
+
+* M-. espress-find-symbol finds function defs in current file
+* Saner indentation than js2-mode
+* Ties to MozRepl [http://www.emacswiki.org/emacs/MozRepl]
+* Much better movement (beginning-of-defun!!)

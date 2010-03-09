@@ -1,0 +1,20 @@
+== Turn on spell check (English) ==
+
+    setlocal spell spelllang=en_us
+
+== Replace something with newline ==
+
+Either one works:
+    %s/&/r/
+    %s/&/^V-^M/   (that's Ctrl-V and Ctrl-M)
+
+== Getting matchit.vim to work in vi ==
+
+I had to add the following line to my ##.vimrc## to get matchit to work
+properly in cygwin
+
+     filetype plugin index on
+
+See also: [[Cygwin]]
+
+

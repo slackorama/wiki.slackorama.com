@@ -1,0 +1,5 @@
+== Urlencode values ==
+
+     <txp:php echo('http://url.com/?title=',
+         urlencode(title(array())),
+         '&link=', urlencode(link(array())),); />

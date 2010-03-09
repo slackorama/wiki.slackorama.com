@@ -1,0 +1,66 @@
+== Helpful Commands ==
+
+=== Create a project===
+
+     mvn archetype:create \
+       -DarchetypeGroupId=org.apache.maven.archetypes \
+       -DgroupId=com.mycompany.app \
+       -DartifactId=my-app
+
+=== mvn dependency:tree ===
+
+Displays the dependency tree for the project. Need to run it with
+##-DMAVEN_UNSAFE=true##.
+
+[http://maven.apache.org/plugins/maven-dependency-plugin/tree-mojo.html|Documentation]
+
+
+=== mvn dependency:resolve ===
+
+Goal that resolves the project dependencies from the repository.
+
+[http://maven.apache.org/plugins/maven-dependency-plugin/resolve-mojo.html|Documentation]
+
+
+=== mvn idea:idea ===
+
+Goal for generating IDEA files from a POM. This plug-in provides the ability
+to generate IDEA project files (.ipr, .iml and .iws files) for IDEA.
+
+[http://maven.apache.org/plugins/maven-idea-plugin/idea-mojo.html|Documentation]
+
+=== mvn jetty:run ===
+
+This will start Jetty running on port 8080 and serving your project. Jetty
+will continue to run until the plugin is explicitly stopped, for example, by a
+<cntrl-c>.
+
+[http://jetty.mortbay.org/maven-plugin/howto.html|Documentation]
+
+=== mvn project-info-reports:dependencies ===
+
+To generate a dependency tree report, use mvn
+project-info-reports:dependencies. This would generate an html file in your
+target\site\dependencies.html.
+
+[http://maven.apache.org/plugins/maven-project-info-reports-plugin/dependencies-mojo.html|Documentation]
+
+Also, if you doubt the output of the project-info-reports:dependencies, you
+can add -X to your mvn command (i.e. mvn -X package) and trace the debug logs
+to find the transitive dependency you are looking for.
+
+[http://docs.codehaus.org/display/MAVENUSER/Dependency+Mechanism|Documentation]
+
+=== mvn help:effective-pom ===
+
+===  Skip tests ===
+
+     mvn -Dmaven.test.skip=true install
+
+
+== Links ==
+
+* [http://maven.apache.org/plugins/|List of available plugins]
+* [http://maven.apache.org/articles.html|Articles about Maven]
+
+

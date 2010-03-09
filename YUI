@@ -1,0 +1,70 @@
+== YUI3 ==
+
+
+=== Get the selected options ===
+
+     YUI().use('node', function(Y) {
+          Y.get("#regionSelect").get("options").each( function() {
+             // this = option from the select
+             var selected = this.get('selected');
+             var value  = this.get('value');
+             var text = this.get('text');
+             // apply secret sauce here
+          });
+     }):
+
+There must be a better way to get selected/checked using the filter method and
+selector-css3?
+
+
+=== Getting multiple nodes and whatnot ===
+
+    <div class="bear">BEAR!</div>
+    <div class="shark">SHARK!</div>
+
+Then in JS:
+
+    YUI().use('node',function(Y) {
+       Y.all(".bear, .shark").each(
+         function(node) {
+           console.log(node);
+         }
+       );
+    });
+
+== Creating your own objects ==
+
+    YUI().use("base", function(Y) { 
+       function SlackObj (config) {
+         SlackObj.superclass.constructor.apply(this, arguments); 
+       }
+       
+       SlackObj.NAME = "baseTime";
+       SlackObj.ATTRS = {
+         fun: {
+            value: true,
+         }
+       };
+              
+       Y.extend(SlackObj, Y.Base, {
+          initializer : function(cfg) { 
+            this.whee = 'foobar'
+          },
+          sayit: function() {
+             return "this is... fun? " + this.get('fun') +  ' ' + this.whee;
+          }
+       });
+       var b = new SlackObj({fun:false});
+            
+       console.log( '1 ',b.sayit() );
+       // prints out '1 this is... fun? false foobar'
+       console.log( '2 ',b.get('fun'));
+       // prints out '2 false'
+    });    
+
+
+
+
+
+
+

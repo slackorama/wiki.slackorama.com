@@ -1,0 +1,43 @@
+== Creating a database and a user ==
+
+This is for a Debian based system that'll use your username to connect.
+
+      > sudo -u postgres sh
+      $ createuser -DRS smason
+      $ createdb -O smason testdb
+      $ quit
+
+Then, assuming you are logged in as 'smason', you can just run:
+
+     > psql testdb
+
+Here's how to create a user that will use a password:
+
+    $ createuser -P -S -D -R -e django
+    Enter password for new role: ....
+    Enter it again: ....
+
+Then, to login you'll need to use:
+
+    > psql -h 127.0.0.1 -U django testdb
+
+[http://www.depesz.com/index.php/2007/10/04/ident/ Here's an article] with details about Debian and ident.    
+
+== Show databases ==
+
+    dbname=> \l
+
+== Show tables ==
+
+    dbname=> \dt
+
+== Show fields in table ==
+
+This is similar to <code>desc TABLE</code> in Oracle
+
+    dbname=> \d TABLE
+
+== Switch database inside of psql ==
+
+    dbname=> \c DATABASE_NAME    
+

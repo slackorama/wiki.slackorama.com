@@ -1,0 +1,15 @@
+See Also: [[Oracle]]]
+
+
+== Microsoft SQL Server ==
+
+===  How to insert over a DB link ===
+ 	insert into openquery(LINKNAME,
+      'select col1, col2, col3,... from TABLE_NAME') SELECT 
+        foo1,
+                foo2,
+                foo3,
+                ...
+        FROM LOCAL_TABLE
+
+
