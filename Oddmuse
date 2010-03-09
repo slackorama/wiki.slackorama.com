@@ -8,5 +8,9 @@ Here are the installed modules on wiki.slackorama.com:
 * toc.pl
 * [http://www.oddmuse.org/cgi-bin/oddmuse/Usemod_Markup_Extension usemod.pl]
 
+== Backing it up ==
+
+    perl $HOME/wiki/raw.pl --page $HOME/wiki/page/ --dir $HOME/wiki/raw/
+
 
 
