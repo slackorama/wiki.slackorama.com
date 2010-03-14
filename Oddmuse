@@ -12,5 +12,12 @@ Here are the installed modules on wiki.slackorama.com:
 
     perl $HOME/wiki/raw.pl --page $HOME/wiki/page/ --dir $HOME/wiki/raw/
 
+    commit_date=`date +"%m-%d-%Y"`
+
+    cd $HOME/wiki/raw/
+
+    git commit -q -a -m "Commit for $commit_date"
+
+    git push origin master
 
 
